@@ -14,6 +14,7 @@
 \usepackage{caption}
 \usepackage{verbatim}
 \usepackage{csvsimple}
+
 \captionsetup{font={small}}
 \geometry{left=2.0cm, right=2.0cm, top=2.5cm, bottom=2.5cm}
 
@@ -273,8 +274,26 @@ In order to make the comparison between different combinations of experiments, w
 I also compute the coverage rate of $\lambda$ in the same conditions, the results are similar. By checking the figures, I find the coverage rates become stable when $\sqrt{M}=100$, which means $M=10000$. So, I choose M to be 10000 for all the cases.\\
 
 
-
-
+\subsection{Monte Carlo Study Algorithm }
+\textbf{------------to Calculate the 3 Criteria of Confidence Intervals Computed by each Methods.} (when $\mu_0 =5$, $n_0 \in \{10,25,50,100,500\}$, $\lambda_0 \in \{2,4,8,12\}$),$method \in \{1,2,3,4,5,6\}$).\\
+ \\
+ \\
+ \textbf{for} ($i \ \in \ 1:10000$)\{\\
+  $\blacklozenge$ Generate $n_0$ Inverse Gaussian r.v. of $\mu=\mu_0$ and $\lambda=\lambda_0$ \\
+  by R function \textbf{statmod::rinvgauss($n$,\ $\mu$,\ $\lambda$)}.\\
+$\blacklozenge$ Compute $95\%$ CI: $I_{\mu}^{(i)}$, $I_{\lambda}^{(i)}$  using the algorithm in Section 2.1---2.6\\
+ and the R function in Appendix 5.1. (N = 2000 when using method 3---6)\\
+\}\\
+\\
+$\blacklozenge$ Compute the actual coverage rate by:
+ $$cv_{\mu}=\frac{1}{10000}\sum_{i=1}^{10000}I(\mu_0 \in I_{\mu}^{(i)}); \ \ cv_{\lambda}=\frac{1}{10000}\sum_{i=1}^{10000}I(\lambda_0 \in I_{\lambda}^{(i)}).$$
+$\blacklozenge$ Compute the median width simply by the R median function.\\
+$\blacklozenge$ Compute the out of bound probability by:
+ $$P_{\mu}=\frac{1}{10000}\sum_{i=1}^{10000}I(lower\ bound\ of\ I_{\mu}^{(i)} \leq 0); \ \ P_{\lambda}=\frac{1}{10000}\sum_{i=1}^{10000}I(lower\ bound\ of\ I_{\lambda}^{(i)} \leq 0).$$
+\\
+\\
+\\
+The code can be found in Appendix 5.2.\\
 
 
 \section{Results}
@@ -335,7 +354,7 @@ method 4 5  &  method 1 2 3 4 5\\
 \\
 \\
 
-Over all, my favorite method is method 5 since it has a good performance in any condition. However, I recommend to use method 1 when the sample size is large since it's much faster than the other ones. \\
+Over all, my favorite method is method 5 since it has a good performance in any condition.  Method 4 is also a reasonable choice. However, I recommend to use method 1 when the sample size is large since it's much faster than the other ones. \\
 
 \newpage
 
